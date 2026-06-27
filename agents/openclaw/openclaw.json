@@ -1,6 +1,6 @@
 {
-  "provider": "anthropic-compatible",
-  "base_url": "https://api.eastrouter.com/api/anthropic",
+  "provider": "openai-compatible",
+  "base_url": "https://api.eastrouter.com/v1",
   "api_key": "sk-er_3c92c45c_ff353ddb64aeb7eedee1c7c77e5b3010d29a957cdab91161",
   "model": "z-ai/glm-5.1",
   "workspace": {
