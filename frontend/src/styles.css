@@ -26,7 +26,7 @@ h2 { font-size: 24px; }
 .eyebrow { color: #1d6f5f; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0; }
 .muted { color: #66746b; margin-top: 6px; }
 .error { color: #b42318; }
-.app-shell { min-height: 100vh; display: grid; grid-template-columns: 240px minmax(320px, 420px) 1fr; }
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: 240px 1fr; }
 .sidebar, .ticket-list, .detail { min-height: 100vh; padding: 22px; }
 .sidebar { background: #16201b; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
 .sidebar .muted { color: #bac6bf; }
@@ -65,3 +65,41 @@ h2 { font-size: 24px; }
   .sidebar, .ticket-list, .detail { min-height: auto; }
   .detail-head { flex-direction: column; }
 }
+.app-shell.two-col {
+  grid-template-columns: 240px 1fr;
+}
+.sidebar button.nav-link {
+  background: transparent;
+  color: #bac6bf;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 6px;
+  width: 100%;
+  border: 0;
+  display: block;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+.sidebar button.nav-link.active {
+  background: #1d6f5f;
+  color: #fff;
+}
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+.active-row {
+  background: #eef5ef !important;
+}
+.active-row td {
+  border-left: 3px solid #1d6f5f;
+}
+tr:hover {
+  background: #fafbf8;
+}
+.status-badge.open { background: #eef5ef; color: #1d6f5f; }
+.status-badge.pending { background: #fff8e8; color: #c0922d; }
+.status-badge.resolved { background: #eef7ee; color: #2e7d32; }
+.status-badge.closed { background: #f5f7f5; color: #66746b; }

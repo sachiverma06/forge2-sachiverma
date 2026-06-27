@@ -25,6 +25,10 @@ class DashboardController extends Controller
             'created_per_day' => $created,
             'open_total' => (clone $base)->whereIn('status', ['open', 'pending'])->count(),
             'sla_breach_rate' => $total > 0 ? round(($breached / $total) * 100, 1) : 0,
+            'agents' => \App\Models\User::where('organization_id', $request->user()->organization_id)
+                ->whereIn('role', ['agent', 'admin'])
+                ->select('id', 'name', 'role')
+                ->get(),
         ]);
     }
 }
