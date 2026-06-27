@@ -1,0 +1,23 @@
+[
+  {
+    "id": "U01",
+    "name": "sachi",
+    "real_name": "Sachi verma",
+    "is_admin": true,
+    "profile": {
+      "email": "vermasachi722@gmail.com"
+    }
+  },
+  {
+    "id": "U02",
+    "name": "hermes",
+    "real_name": "Hermes",
+    "is_bot": true
+  },
+  {
+    "id": "U03",
+    "name": "openclaw",
+    "real_name": "OpenClaw",
+    "is_bot": true
+  }
+]

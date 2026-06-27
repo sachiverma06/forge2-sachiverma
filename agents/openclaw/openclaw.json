@@ -1,0 +1,26 @@
+{
+  "provider": "anthropic-compatible",
+  "base_url": "https://api.eastrouter.com/api/anthropic",
+  "api_key": "${EASTROUTER_API_KEY}",
+  "model": "z-ai/glm-5.1",
+  "workspace": {
+    "root": ".",
+    "command_execution": true
+  },
+  "slack": {
+    "enabled": true,
+    "app_token": "${SLACK_APP_TOKEN}",
+    "bot_token": "${SLACK_BOT_TOKEN}",
+    "channels": {
+      "coder": "#agent-coder",
+      "log": "#agent-log",
+      "ci": "#ci-cd"
+    }
+  },
+  "tools": {
+    "filesystem": true,
+    "shell": true,
+    "git": true,
+    "tests": true
+  }
+}

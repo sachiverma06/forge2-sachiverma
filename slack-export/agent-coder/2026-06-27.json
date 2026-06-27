@@ -1,0 +1,50 @@
+[
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "@openclaw please implement backend Issue 1 (migrations), Issue 2 (models & scopes), and Issue 3 (auth). Keep it clean, no emojis.",
+    "ts": "1782550920.000100"
+  },
+  {
+    "type": "message",
+    "user": "U03",
+    "text": "Task acknowledged. Starting database setup and models initialization.",
+    "ts": "1782550980.000200"
+  },
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "@openclaw please implement backend Issue 4 (database seeder) and Issue 5 (PHPUnit tests). Ensure tenant isolation is covered.",
+    "ts": "1782552000.000100"
+  },
+  {
+    "type": "message",
+    "user": "U03",
+    "text": "Seeder and test cases have been completed. All database schemas are successfully populated and verified.",
+    "ts": "1782552060.000200"
+  },
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "@openclaw please implement frontend Issue 6 (Vite setup & Axios client) and Issue 7 (Auth pages). Ensure routing works.",
+    "ts": "1782554520.000100"
+  },
+  {
+    "type": "message",
+    "user": "U03",
+    "text": "Acknowledged. Bootstrapping React app and setting up login views.",
+    "ts": "1782554580.000200"
+  },
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "@openclaw please implement frontend Issue 8 (Dashboard metrics), Issue 9 (Sidebar), and Issue 10 (Ticket list and details).",
+    "ts": "1782555600.000100"
+  },
+  {
+    "type": "message",
+    "user": "U03",
+    "text": "Ticket list filters, dashboard metrics cards, comments and claiming flows have been implemented successfully.",
+    "ts": "1782555660.000200"
+  }
+]

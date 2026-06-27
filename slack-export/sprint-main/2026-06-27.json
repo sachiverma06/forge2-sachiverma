@@ -1,0 +1,26 @@
+[
+  {
+    "type": "message",
+    "user": "U01",
+    "text": "@hermes goal for sprint 1 is core models, tenancy, migrations, seeders, and tests. Plan tickets + assign to OpenClaw before any code.",
+    "ts": "1782550800.000100"
+  },
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "Sprint plan generated. Decomposed into Issue 1 (migrations), Issue 2 (models & scopes), Issue 3 (auth), Issue 4 (seeder), and Issue 5 (api tests). Assigning core items to @openclaw.",
+    "ts": "1782550860.000200"
+  },
+  {
+    "type": "message",
+    "user": "U01",
+    "text": "@hermes goal for sprint 2 is Vite React frontend setup, Axios Sanctum integration, Login page, Sidebar, Dashboard, TicketList and TicketDetails views. Plan and assign to OpenClaw.",
+    "ts": "1782554400.000100"
+  },
+  {
+    "type": "message",
+    "user": "U02",
+    "text": "Sprint 2 plan generated. Decomposed into Issue 6 (Vite bootstrap), Issue 7 (auth pages), Issue 8 (dashboard cards), Issue 9 (sidebar), and Issue 10 (ticket details/replies). Assigning to @openclaw.",
+    "ts": "1782554460.000200"
+  }
+]

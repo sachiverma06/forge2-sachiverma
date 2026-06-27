@@ -1,0 +1,17 @@
+provider: eastrouter
+base_url: https://api.eastrouter.com/v1
+api_key: ${EASTROUTER_API_KEY}
+model: deepseek/deepseek-v4-pro
+memory:
+  enabled: true
+slack:
+  enabled: true
+  app_token: ${SLACK_APP_TOKEN}
+  bot_token: ${SLACK_BOT_TOKEN}
+  channels:
+    sprint: "#sprint-main"
+    coder: "#agent-coder"
+    review: "#human-review"
+workflow:
+  human_merge_required: true
+  sprint_docs_path: sprints
