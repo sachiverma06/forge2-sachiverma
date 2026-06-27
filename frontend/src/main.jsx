@@ -73,6 +73,66 @@ function Login({ onLogin }) {
   </main>
 }
 
+function CreateTicketForm({ onCreated, onCancel, api }) {
+  const [subject, setSubject] = useState('')
+  const [description, setDescription] = useState('')
+  const [priority, setPriority] = useState('medium')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function submit(event) {
+    event.preventDefault()
+    if (!subject.trim() || !description.trim()) {
+      setError('Please fill in all fields.')
+      return
+    }
+    setLoading(true)
+    setError('')
+    try {
+      const data = await api('/tickets', {
+        method: 'POST',
+        body: JSON.stringify({ subject, description, priority }),
+      })
+      onCreated(data)
+    } catch (err) {
+      setError(err.message || 'Failed to create ticket')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: '24px' }}>
+      <div>
+        <p className="eyebrow">Tickets</p>
+        <h2>Create New Ticket</h2>
+        <p className="muted">Submit a new customer support request.</p>
+      </div>
+      <form onSubmit={submit} className="stack">
+        <label>Subject
+          <input value={subject} onChange={event => setSubject(event.target.value)} required />
+        </label>
+        <label>Description
+          <textarea value={description} onChange={event => setDescription(event.target.value)} required />
+        </label>
+        <label>Priority
+          <select value={priority} onChange={event => setPriority(event.target.value)}>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </label>
+        {error && <p className="error">{error}</p>}
+        <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+          <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Submit Ticket'}</button>
+          <button type="button" className="ghost" onClick={onCancel} disabled={loading}>Cancel</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
 function App() {
   const [session, setSession] = useState(() => JSON.parse(localStorage.getItem('pulsedesk.session') || 'null'))
   const [tickets, setTickets] = useState([])
@@ -81,6 +141,7 @@ function App() {
   const [notifications, setNotifications] = useState([])
   const [filters, setFilters] = useState({ q: '', status: '', priority: '', assignee_id: '' })
   const [reply, setReply] = useState({ body: '', is_internal: false })
+  const [creating, setCreating] = useState(false)
   const api = useApi(session?.token)
 
   useEffect(() => {
@@ -108,6 +169,7 @@ function App() {
   }
 
   async function loadTicket(id) {
+    setCreating(false)
     const data = await api('/tickets/' + id)
     setSelected(data.ticket)
   }
@@ -153,6 +215,12 @@ function App() {
 
     <section className="ticket-list">
       <div className="toolbar">
+        <button 
+          onClick={() => { setCreating(true); setSelected(null); }} 
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', padding: '10px', background: '#1d6f5f', color: '#fff', borderRadius: '6px', border: '0', fontWeight: '600', cursor: 'pointer', marginBottom: '8px' }}
+        >
+          <Plus size={18} /> New Ticket
+        </button>
         <div className="search"><Search size={17} /><input placeholder="Search tickets" value={filters.q} onChange={event => setFilters({ ...filters, q: event.target.value })} /></div>
         <select value={filters.status} onChange={event => setFilters({ ...filters, status: event.target.value })}>
           <option value="">Status</option>
@@ -176,36 +244,53 @@ function App() {
     </section>
 
     <section className="detail">
-      {selected ? <>
-        <header className="detail-head">
-          <div>
-            <p className="eyebrow">#{selected.id}</p>
-            <h2>{selected.subject}</h2>
-            <p className="muted">Requested by {selected.requester?.name}</p>
+      {creating ? (
+        <CreateTicketForm 
+          api={api} 
+          onCreated={(newTicket) => {
+            setCreating(false);
+            loadAll().then(() => {
+              if (newTicket && newTicket.id) {
+                loadTicket(newTicket.id);
+              }
+            });
+          }} 
+          onCancel={() => setCreating(false)} 
+        />
+      ) : selected ? (
+        <>
+          <header className="detail-head">
+            <div>
+              <p className="eyebrow">#{selected.id}</p>
+              <h2>{selected.subject}</h2>
+              <p className="muted">Requested by {selected.requester?.name}</p>
+            </div>
+            <div className="actions">
+              <button className="ghost" onClick={claimTicket}><UserCheck size={18} /> Claim</button>
+              <select value={selected.status} onChange={event => updateStatus(event.target.value)}>{statusOptions.map(option => <option key={option}>{option}</option>)}</select>
+            </div>
+          </header>
+          <div className="description">{selected.description}</div>
+          <div className="chips">
+            <span>{selected.priority}</span>
+            <span>{selected.assignee?.name || 'Unassigned'}</span>
+            <span>{slaText(selected)}</span>
           </div>
-          <div className="actions">
-            <button className="ghost" onClick={claimTicket}><UserCheck size={18} /> Claim</button>
-            <select value={selected.status} onChange={event => updateStatus(event.target.value)}>{statusOptions.map(option => <option key={option}>{option}</option>)}</select>
+          <div className="conversation">
+            {(selected.comments || []).map(comment => <article key={comment.id} className={comment.is_internal ? 'internal' : ''}>
+              <strong>{comment.user?.name}</strong>
+              <p>{comment.body}</p>
+            </article>)}
           </div>
-        </header>
-        <div className="description">{selected.description}</div>
-        <div className="chips">
-          <span>{selected.priority}</span>
-          <span>{selected.assignee?.name || 'Unassigned'}</span>
-          <span>{slaText(selected)}</span>
-        </div>
-        <div className="conversation">
-          {(selected.comments || []).map(comment => <article key={comment.id} className={comment.is_internal ? 'internal' : ''}>
-            <strong>{comment.user?.name}</strong>
-            <p>{comment.body}</p>
-          </article>)}
-        </div>
-        <form className="reply" onSubmit={sendReply}>
-          <textarea value={reply.body} onChange={event => setReply({ ...reply, body: event.target.value })} placeholder="Write a reply" />
-          <label className="check"><input type="checkbox" checked={reply.is_internal} onChange={event => setReply({ ...reply, is_internal: event.target.checked })} /> Internal note</label>
-          <button><Plus size={18} /> Add reply</button>
-        </form>
-      </> : <div className="empty"><CheckCircle2 /> Select a ticket</div>}
+          <form className="reply" onSubmit={sendReply}>
+            <textarea value={reply.body} onChange={event => setReply({ ...reply, body: event.target.value })} placeholder="Write a reply" />
+            <label className="check"><input type="checkbox" checked={reply.is_internal} onChange={event => setReply({ ...reply, is_internal: event.target.checked })} /> Internal note</label>
+            <button><Plus size={18} /> Add reply</button>
+          </form>
+        </>
+      ) : (
+        <div className="empty"><CheckCircle2 /> Select a ticket or create a new one</div>
+      )}
     </section>
   </main>
 }
